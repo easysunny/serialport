@@ -1,7 +1,8 @@
 # serialport--Android Model
 > 迈冲科技串口开发框架，通过配置xml,省去处理发送和读取的代码，更加专注于其他逻辑。
 
-# 导入模块
+# 演示案列
+[https://gitee.com/wyndem/serialport-example/tree/master/](https://gitee.com/wyndem/serialport-example/tree/master/)
 
 
 
