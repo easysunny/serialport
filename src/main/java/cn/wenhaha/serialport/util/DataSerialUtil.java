@@ -4,7 +4,10 @@ package cn.wenhaha.serialport.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
+import cn.wenhaha.serialport.context.SerialPortConfigContext;
+import cn.wenhaha.serialport.enums.LabelFunctionEnum;
 import cn.wenhaha.serialport.enums.LabelRootEnum;
 
 /**
@@ -31,9 +34,16 @@ public class DataSerialUtil {
                     //有一组数据进来了
                     headIndex=i;
                     List<String> arr=new ArrayList<>();
+
+                    //获取标示位
+                    int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.MARK.getMarking());
+                    String address=hexString[i+address_index];
+                    Function function = ProtocolUtil.findByAddressFunction(address);
+
                     //获取长度
                     int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
-                    int lenth=Integer.valueOf(hexString[i+lenth_index]);
+                    //减去多余的数据位
+                    int lenth=Integer.valueOf(hexString[i+lenth_index])-function.getAddLengthKeys().size()- SerialPortConfigContext.getSerialPortConfigContext().getAddLengthKeys().size();
 
                     int size = ProtocolUtil.getSize();
                     for (int j=i;j<=size-1+lenth+i;j++){

@@ -2,21 +2,19 @@ package cn.wenhaha.serialport.enums;
 
 
 /**
- * 根标签枚举类
+ * function中的send标签枚举类
  */
-public enum LabelFunctionEnum {
+public enum LabelSendEnum {
 
-    NAME("name",true),
-    MARK("mark",true),
-    SEND("send",false),
-    CLASS("class",true);
-
-
+    //属性值
+    VALUE("value",true),
+    //发送的次数
+    NUMBER("number",false);
 
     private String marking;
     private Boolean required;
 
-    LabelFunctionEnum(String marking, boolean required) {
+    LabelSendEnum(String marking, boolean required) {
         this.marking = marking;
         this.required=required;
     }
@@ -30,9 +28,9 @@ public enum LabelFunctionEnum {
         return required;
     }
 
-    public static LabelFunctionEnum getEnum(String marking){
+    public static LabelSendEnum getEnum(String marking){
 
-        for (LabelFunctionEnum e : LabelFunctionEnum.values()) {
+        for (LabelSendEnum e : LabelSendEnum.values()) {
             if(e.marking.equals(marking)){
                 return e;
             }

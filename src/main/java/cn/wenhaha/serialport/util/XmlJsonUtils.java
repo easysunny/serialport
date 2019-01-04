@@ -2,6 +2,7 @@ package cn.wenhaha.serialport.util;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +45,22 @@ public class XmlJsonUtils {
         return keyList;
     }
 
+    public static List<String> getJsonDocumentElement(JSONObject jsonObject) throws JSONException {
+
+        ArrayList<String> keyList = new ArrayList<>();
+        JSONObject protocol = jsonObject;
+
+        Iterator<String> keys = protocol.keys();
+
+        while (keys.hasNext()){
+            String key = keys.next();
+            keyList.add(key);
+        }
+        return keyList;
+    }
+
+
+
     public  static boolean isSystemElement(String key){
         try {
             LabelRootEnum anEnum = LabelRootEnum.getEnum(key);
@@ -58,4 +75,43 @@ public class XmlJsonUtils {
         }
         return false;
     }
+
+
+
+
+    public  static List<String> containAttributeElement(JSONObject jsonObject, String attribute){
+        try {
+
+            ArrayList<String> keys = new ArrayList<>();
+
+            JSONArray jsonArray = jsonObject.names();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String key = jsonArray.getString(i);
+
+                try {
+
+                    JSONObject jSONObject = jsonObject.getJSONObject(key);
+                    boolean aNull = jSONObject.isNull(attribute);
+                    if (!aNull){
+                        keys.add(key);
+                    }
+
+                } catch (JSONException e) {
+
+
+                }
+
+            }
+
+            return keys;
+
+        } catch (Exception e) {
+            throw  new RuntimeException("标签有错误");
+        }
+
+    }
+
+
+
+
 }

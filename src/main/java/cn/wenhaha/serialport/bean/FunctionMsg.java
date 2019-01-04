@@ -1,8 +1,11 @@
 package cn.wenhaha.serialport.bean;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.example.x6.serial.SerialPort;
+
+import java.util.List;
 
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
 import cn.wenhaha.serialport.core.DataStitching;
@@ -53,6 +56,6 @@ public abstract class FunctionMsg{
     }
 
 
-    public abstract  void  read(String name,String[] data);
+    public abstract  void  read(String name,String[] data,List<String> allData);
 
 }

@@ -1,10 +1,59 @@
 package cn.wenhaha.serialport.bean;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Function {
+
     private String name;
     private String address;
     private String className;
+    private SendData sendData;
+    private Map<String,String> mapData;
+    private JSONObject function;
+    //需要加入计算长度的标签
+    private List<String> addLengthKeys;
 
+    public Function() {
+        mapData=new HashMap<>(10);
+        addLengthKeys=new ArrayList<>(10);
+    }
+
+    public JSONObject getFunction() {
+        return function;
+    }
+
+    public void setFunction(JSONObject function) {
+        this.function = function;
+    }
+
+    public List<String> getAddLengthKeys() {
+        return addLengthKeys;
+    }
+
+    public void setAddLengthKeys(List<String> addLengthKeys) {
+        this.addLengthKeys = addLengthKeys;
+    }
+
+    public Map<String, String> getMapData() {
+        return mapData;
+    }
+
+    public void setMapData(Map<String, String> mapData) {
+        this.mapData = mapData;
+    }
+
+    public SendData getSendData() {
+        return sendData;
+    }
+
+    public void setSendData(SendData sendData) {
+        this.sendData = sendData;
+    }
 
     public String getName() {
         return name;
@@ -36,6 +85,7 @@ public class Function {
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", className='" + className + '\'' +
+                ", sendData=" + sendData +
                 '}';
     }
 }

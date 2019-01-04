@@ -5,10 +5,17 @@ import android.util.Log;
 import android.widget.TextView;
 
 import java.sql.Time;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
+import cn.wenhaha.serialport.bean.Function;
+import cn.wenhaha.serialport.bean.FunctionMsg;
+import cn.wenhaha.serialport.context.FunctionConetxt;
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
+import cn.wenhaha.serialport.context.SerialPortConfigContext;
 import cn.wenhaha.serialport.core.DataServer;
+import cn.wenhaha.serialport.core.FunctionSendData;
 import cn.wenhaha.serialport.core.Monitoring;
 import cn.wenhaha.serialport.util.DataUtil;
 
@@ -28,12 +35,17 @@ public class SerialPortData {
 
 
     public static void initialize(){
-        new SerialPortData().init();
+        SerialPortData serialPortData = new SerialPortData();
+        //读
+        serialPortData.read();
+        //发
+        serialPortData.send();
+
 
     }
 
 
-    public void init() {
+    public void read() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -53,5 +65,31 @@ public class SerialPortData {
         thread.start();
 
     }
+
+    public void  send(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (true){
+                    List<FunctionMsg> sendFunctionMsg = FunctionConetxt.getSerialPortConfigContext().getSendFunctionMsg();
+                    for (FunctionMsg functionMsg:sendFunctionMsg
+                            ) {
+                        FunctionSendData.sendFunctionData(functionMsg);
+                    }
+                    if (sendFunctionMsg.size()==0) break;
+                }
+
+            }
+        }).start();
+
+        Log.d(TAG, "自动发送已经完成了。线程结束");
+    }
+
+
+
+
+
 
 }

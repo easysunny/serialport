@@ -48,7 +48,7 @@ public class DataServer implements Observer {
                 List<List<String>> lists = DataSerialUtil.analysisTotalData(hexString);
 
                 //地址段位置
-                int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.ADDRESS.getMarking());
+                int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.MARK.getMarking());
 
                 //遍历数据包
                 for (List<String> datas:lists){
@@ -74,7 +74,7 @@ public class DataServer implements Observer {
 
 
                     //回调
-                    functionMsg.read(function.getName(),data_str);
+                    functionMsg.read(function.getName(),data_str,datas);
 
                 }
 

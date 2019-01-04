@@ -24,6 +24,8 @@ public class SerialPortConfigContext {
     private Long readSpeed=200l;
     private Map<String,Function> mapFunction;
     private Map<String,Object>  mapRootData;
+    //需要加入计算长度的标签
+    private List<String> addLengthKeys;
     private List<String> structure;
 
 
@@ -31,6 +33,7 @@ public class SerialPortConfigContext {
         mapFunction=new HashMap<>(10);
         mapRootData=new HashMap<>(20);
         structure=new ArrayList<>(10);
+        addLengthKeys=new ArrayList<>(10);
     }
 
 
@@ -39,6 +42,14 @@ public class SerialPortConfigContext {
              serialPortConfigContext = new SerialPortConfigContext();
         }
         return serialPortConfigContext;
+    }
+
+    public List<String> getAddLengthKeys() {
+        return addLengthKeys;
+    }
+
+    public void setAddLengthKeys(List<String> addLengthKeys) {
+        this.addLengthKeys = addLengthKeys;
     }
 
     public Long getReadSpeed() {

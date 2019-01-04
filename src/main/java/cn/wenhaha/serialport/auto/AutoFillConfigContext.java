@@ -8,10 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import cn.wenhaha.serialport.bean.Function;
+import cn.wenhaha.serialport.bean.SendData;
 import cn.wenhaha.serialport.config.AutoConfigInf;
 import cn.wenhaha.serialport.context.SerialPortConfigContext;
 import cn.wenhaha.serialport.enums.LabelFunctionEnum;
 import cn.wenhaha.serialport.enums.LabelRootEnum;
+import cn.wenhaha.serialport.enums.LabelSendEnum;
 import cn.wenhaha.serialport.util.XmlJsonUtils;
 
 /**
@@ -40,6 +42,16 @@ public class AutoFillConfigContext implements AutoConfigInf{
 
         String structure = XmlJsonUtils.getJsonObject().getString(LabelRootEnum.STRUCTURE.getMarking()).trim();
         serialPortConfigContext.setStructure(Arrays.asList(structure.split(",")));
+
+        //填充可能加入计算长度的字段
+        List<String> addLength = XmlJsonUtils.containAttributeElement(XmlJsonUtils.getJsonObject(), "addLength");
+        for (String key :
+                addLength) {
+            boolean addLength1 = XmlJsonUtils.getJsonObject().getJSONObject(key).getBoolean("addLength");
+            if (!addLength1) addLength.remove(key);
+        }
+        serialPortConfigContext.setAddLengthKeys(addLength);
+
 
         //下面可能为空
         if(!XmlJsonUtils.getJsonObject().isNull(LabelRootEnum.CRC.getMarking()))
@@ -91,9 +103,11 @@ public class AutoFillConfigContext implements AutoConfigInf{
             Function f = new Function();
             JSONObject function = jsonArray.getJSONObject(i);
 
-            f.setAddress(function.getJSONObject(LabelFunctionEnum.ADDRESS.getMarking()).getString("value"));
+            f.setFunction(function);
+            f.setSendData(fillingSendData(function));
+            f.setAddress(function.getJSONObject(LabelFunctionEnum.MARK.getMarking()).getString("value"));
             f.setName(function.getString(LabelFunctionEnum.NAME.getMarking()));
-
+            fillingMapFunctionData(function,f);
             String className = null;
             try {
                 className = function.getJSONArray(LabelFunctionEnum.CLASS.getMarking()).getJSONObject(0).getString("content");
@@ -102,16 +116,65 @@ public class AutoFillConfigContext implements AutoConfigInf{
             }
             f.setClassName(className);
 
+            //填充可能加入计算长度的字段
+            List<String> addLength = XmlJsonUtils.containAttributeElement(function, "addLength");
+            for (String key :
+                    addLength) {
+                boolean addLength1 =function.getJSONObject(key).getBoolean("addLength");
+                if (!addLength1) addLength.remove(key);
+            }
+            f.setAddLengthKeys(addLength);
+
+
 
             Function function1 = serialPortConfigContext.getMapFunction().get(f.getName());
             if (function1!=null) throw new RuntimeException("name属性不能重复："+f.getName());
             serialPortConfigContext.getMapFunction().put(f.getName(),f);
 
         }
-        
-        
-        
     }
+
+
+    /**
+     * 填充FunctionMapData字段
+     */
+    private void fillingMapFunctionData(JSONObject jsonObject,Function function) throws JSONException {
+        List<String> rootDocumentElement = XmlJsonUtils.getJsonDocumentElement(jsonObject);
+        for (String key :
+                rootDocumentElement) {
+            try {
+                LabelFunctionEnum.getEnum(key);
+            } catch (Exception e) {
+                String o =jsonObject.getJSONObject(key).getString("value");
+                function.getMapData().put(key,o);
+            }
+
+        }
+    }
+
+
+    /**
+     * 封装sendData
+     * @return
+     * @throws JSONException
+     */
+    private SendData fillingSendData(JSONObject jsonObject) throws JSONException {
+        boolean aNull = jsonObject.isNull(LabelFunctionEnum.SEND.getMarking());
+        if(aNull) return null;
+
+        JSONObject jsonObject1 = jsonObject.getJSONObject(LabelFunctionEnum.SEND.getMarking());
+        SendData sendData = new SendData();
+
+        sendData.setValue(jsonObject1.getString(LabelSendEnum.VALUE.getMarking()));
+        if (jsonObject1.isNull(LabelSendEnum.NUMBER.getMarking()))
+            sendData.setNumber(-1);
+        else
+            sendData.setNumber(jsonObject1.getInt(LabelSendEnum.NUMBER.getMarking()));
+
+        return sendData;
+    }
+
+
 
 
     /**
