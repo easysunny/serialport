@@ -125,6 +125,11 @@ public class AutoFillConfigContext implements AutoConfigInf{
             }
             f.setAddLengthKeys(addLength);
 
+            //下面字段可能为空
+            if(!function.isNull(LabelFunctionEnum.INDEX.getMarking()))
+                f.setIndex(function.getString(LabelFunctionEnum.INDEX.getMarking()));
+
+
 
 
             Function function1 = serialPortConfigContext.getMapFunction().get(f.getName());

@@ -60,8 +60,9 @@ public class DataUtil {
         try {
             Thread.sleep(SeriaPortConetxt.getMillisecond());
             String[] hexString = ByteUtil.getHexStrings(bytes, 0, bytes.length);
-            if (SeriaPortConetxt.getDebug())
+            if (SeriaPortConetxt.getDebug()){
                 Log.d(TAG, "sendMesg: "+String.valueOf(hexString));
+            }
             ttyS1OutputStream.write(bytes);
         } catch (IOException e) {
             Log.e(TAG, "IOException: "+e);
@@ -78,6 +79,7 @@ public class DataUtil {
      * 获取
      */
     public static void rendMesg(final DataRead dataRead){
+
         if (ttyS1InputStream==null)
             return;
         byte[] b=new byte[1024];
@@ -105,6 +107,8 @@ public class DataUtil {
                 Log.d(TAG, "rendMesg: "+hexString);
 
             dataRead.dataHeadle(data);
+
+
 
         }
     }

@@ -230,6 +230,8 @@ public class ByteUtil {
     }
 
     public static String[] getHexStrings(byte[] b, int index, int count){
+
+        Integer.getInteger("9a",16);
         String[] str=new String[count];
         if (b == null || index < 0 || b.length < index + count ) {
             return null;
@@ -327,5 +329,94 @@ public class ByteUtil {
 
         return bytes;
     }
+
+
+    public static byte[] toBytes(String[] str) {
+        if(str == null || str.length==0) {
+            return new byte[0];
+        }
+
+        byte[] bytes = new byte[str.length];
+        for(int i = 0; i < str.length; i++) {
+            String subStr = str[i];
+            bytes[i] = (byte) Integer.parseInt(subStr, 16);
+        }
+
+        return bytes;
+    }
+
+
+
+    /**
+     * 将byte转换为一个长度为8的byte数组，数组每个值代表bit
+     */
+    public static byte[] getBooleanArray(byte b) {
+        byte[] array = new byte[8];
+        for (int i = 7; i >= 0; i--) {
+            array[i] = (byte)(b & 1);
+            b = (byte) (b >> 1);
+        }
+
+        return array;
+    }
+
+    /**
+     * 把byte转为字符串的bit
+     */
+    public static String byteToBit(byte b) {
+        return ""
+                + (byte) ((b >> 7) & 0x1) + (byte) ((b >> 6) & 0x1)
+                + (byte) ((b >> 5) & 0x1) + (byte) ((b >> 4) & 0x1)
+                + (byte) ((b >> 3) & 0x1) + (byte) ((b >> 2) & 0x1)
+                + (byte) ((b >> 1) & 0x1) + (byte) ((b >> 0) & 0x1);
+    }
+
+
+    /**
+     * 将byte转换为一个长度为8的byte数组，数组每个值代表bit
+     * 倒序
+     */
+    public static byte[] getBooleanArrayReverse(byte b) {
+        byte[] array = getBooleanArray(b);
+        //倒序
+        for (int i = 0; i < array.length / 2; i++) {
+            byte temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
+        return array;
+    }
+
+
+
+
+    /**
+     * 把byte转为字符串的bit
+     */
+    public static String byteToBitReverse(byte b) {
+        String s = byteToBit(b);
+        StringBuilder sb = new StringBuilder(s);
+        String afterreverse = sb.reverse().toString();
+        return afterreverse;
+    }
+
+
+    /**
+     * 切割数组
+     * @param data
+     * @param index
+     * @param count
+     * @return
+     */
+    public static byte[] cuttingArray(byte[] data,int index, int count){
+        if (index+count>data.length) return data;
+
+        byte[] newByte=new byte[count];
+        for (int i = index,j=0; i < newByte.length; i++,j++) {
+            newByte[j]=data[i];
+        }
+        return newByte;
+    }
+
 
 }

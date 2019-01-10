@@ -2,6 +2,7 @@ package cn.wenhaha.serialport.processing;
 
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 import cn.wenhaha.serialport.bean.Function;
@@ -20,7 +21,7 @@ public class DefaultMsgProcessing extends FunctionMsg {
     @Override
     public void read(String name, String[] data, List<String> allData) {
         if (SeriaPortConetxt.getDebug())
-            Log.d(TAG, "read: "+data);
+            Log.d(TAG, name+"----read: "+ Arrays.toString(data));
     }
 
 

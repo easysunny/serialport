@@ -43,8 +43,10 @@ public class DataSerialUtil {
                     //获取长度
                     int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
                     //减去多余的数据位
-                    int lenth=Integer.valueOf(hexString[i+lenth_index])-function.getAddLengthKeys().size()- SerialPortConfigContext.getSerialPortConfigContext().getAddLengthKeys().size();
-
+                    int lenth=Integer.parseInt(hexString[i+lenth_index],16)
+                            -function.getAddLengthKeys().size()
+                            - SerialPortConfigContext.getSerialPortConfigContext().getAddLengthKeys().size();
+//                    lenth=Integer.p
                     int size = ProtocolUtil.getSize();
                     for (int j=i;j<=size-1+lenth+i;j++){
                         arr.add(hexString[j]);

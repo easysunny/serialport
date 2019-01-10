@@ -17,6 +17,9 @@ public class Function {
     private JSONObject function;
     //需要加入计算长度的标签
     private List<String> addLengthKeys;
+    //数据起始位置
+    private String index;
+
 
     public Function() {
         mapData=new HashMap<>(10);
@@ -29,6 +32,14 @@ public class Function {
 
     public void setFunction(JSONObject function) {
         this.function = function;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     public List<String> getAddLengthKeys() {

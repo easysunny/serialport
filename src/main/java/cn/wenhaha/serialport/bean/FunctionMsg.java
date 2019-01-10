@@ -1,15 +1,9 @@
 package cn.wenhaha.serialport.bean;
 
-import android.provider.ContactsContract;
-import android.util.Log;
-
-import com.example.x6.serial.SerialPort;
-
 import java.util.List;
 
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
 import cn.wenhaha.serialport.core.DataStitching;
-import cn.wenhaha.serialport.processing.DefaultMsgProcessing;
 import cn.wenhaha.serialport.util.DataUtil;
 import cn.wenhaha.serialport.util.crc.Crc16;
 

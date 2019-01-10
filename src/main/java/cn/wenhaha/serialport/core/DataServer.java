@@ -11,11 +11,13 @@ import java.util.Observer;
 
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.FunctionMsg;
+import cn.wenhaha.serialport.context.SerialPortConfigContext;
 import cn.wenhaha.serialport.enums.LabelFunctionEnum;
 import cn.wenhaha.serialport.enums.LabelRootEnum;
 import cn.wenhaha.serialport.util.ByteUtil;
 import cn.wenhaha.serialport.util.DataSerialUtil;
 import cn.wenhaha.serialport.util.ProtocolUtil;
+import cn.wenhaha.serialport.util.crc.Crc16;
 
 public class DataServer implements Observer {
 
@@ -37,7 +39,6 @@ public class DataServer implements Observer {
 
     @Override
     public   void update(Observable o, Object arg) {
-        Log.d(TAG, "update: 我调用了");
         if (o instanceof Monitoring){
 
             Monitoring m=(Monitoring)o;
@@ -53,6 +54,18 @@ public class DataServer implements Observer {
                 //遍历数据包
                 for (List<String> datas:lists){
 
+
+                    //效验crc
+                    String[] data=new String[datas.size()];
+                    for (int i=0;i<datas.size();i++){
+                        data[i]=datas.get(i);
+                    }
+                    byte[] bytes = ByteUtil.toBytes(data);
+                    //如果不匹配
+                    if (!Crc16.checkCRC(bytes)){
+                       return;
+                    }
+
                     //取出对应的地址对象
                     String address = datas.get(address_index);
                     Function function = ProtocolUtil.findByAddressFunction(address);
@@ -66,7 +79,7 @@ public class DataServer implements Observer {
 
 
                     //获取数据的起始位置
-                    int function_index = ProtocolUtil.indexPosition(LabelRootEnum.FUNCTION.getMarking());
+                    int function_index = getDataIndex(function);
                     String[] data_str=new String[length];
                     for (int i = function_index,j=0; i < function_index+length; i++,j++) {
                         data_str[j]=datas.get(i);
@@ -96,6 +109,24 @@ public class DataServer implements Observer {
     }
 
 }
+
+
+    /**
+     * 获取数据计算长度首选索引
+     * @return
+     */
+    public  Integer getDataIndex( Function function){
+        int length=-1;
+        //判断是否有指定位置
+        String index = function.getIndex();
+        if (index!=null){
+              length= ProtocolUtil.indexPosition(index);
+        }else {
+            length= ProtocolUtil.indexPosition(LabelRootEnum.FUNCTION.getMarking());
+        }
+        return length;
+    }
+
 }
 
 

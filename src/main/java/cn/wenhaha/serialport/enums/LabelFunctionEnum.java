@@ -9,6 +9,7 @@ public enum LabelFunctionEnum {
     NAME("name",true),
     MARK("mark",true),
     SEND("send",false),
+    INDEX("index",false),
     CLASS("class",true);
 
 
