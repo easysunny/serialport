@@ -105,7 +105,7 @@ public class AutoFillConfigContext implements AutoConfigInf{
 
             f.setFunction(function);
             f.setSendData(fillingSendData(function));
-            f.setAddress(function.getJSONObject(LabelFunctionEnum.MARK.getMarking()).getString("value"));
+            f.setAddress(function.getJSONObject(LabelFunctionEnum.MARK.getMarking()).getString("value").toLowerCase());
             f.setName(function.getString(LabelFunctionEnum.NAME.getMarking()));
             fillingMapFunctionData(function,f);
             String className = null;

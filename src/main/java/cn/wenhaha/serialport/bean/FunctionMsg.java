@@ -23,6 +23,21 @@ public abstract class FunctionMsg{
 
     public  void send(String  data){
 
+        DataUtil.sendMesg(getCompleteData(data));
+
+    }
+
+    public  void sendNoDelay(String  data){
+        DataUtil.sendMesg(getCompleteData(data),0l);
+    }
+
+
+    /**
+     * 获取完整的帧数据
+     * @param data
+     * @return
+     */
+    private  byte[] getCompleteData(String  data){
         //获取完整的数据链
         String s = DataStitching.getDataStitching().dataResult(function.getName(), data);
 
@@ -34,11 +49,8 @@ public abstract class FunctionMsg{
 
         //加crc
         byte[] data_bytes=addCrc(bytes);
-
-        DataUtil.sendMesg(data_bytes);
-
+        return data_bytes;
     }
-
 
 
     private byte[] addCrc(byte[] data){

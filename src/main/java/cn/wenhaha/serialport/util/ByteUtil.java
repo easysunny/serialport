@@ -412,7 +412,7 @@ public class ByteUtil {
         if (index+count>data.length) return data;
 
         byte[] newByte=new byte[count];
-        for (int i = index,j=0; i < newByte.length; i++,j++) {
+        for (int i = index,j=0; j < newByte.length; i++,j++) {
             newByte[j]=data[i];
         }
         return newByte;

@@ -20,14 +20,12 @@ public class SerialPortResourceContext {
     private static final String TAG = "SerialPortResourceConte";
 
     public static void initialize(Context context,int xml) throws Exception {
-
+        if (sContext!=null&&xmlToJson!=null) return;
         InputStream inputStream = context.getResources().openRawResource(xml);
-
-
         xmlToJson = new XmlToJson.Builder(inputStream, null)
-                            .forceList("/Protocol/function")
-                            .forceList("/Protocol/function/class")
-                            .build();
+                        .forceList("/Protocol/function")
+                        .forceList("/Protocol/function/class")
+                        .build();
         sContext=context;
 
         initializeConfig();
