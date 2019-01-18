@@ -160,19 +160,19 @@ public class AutoXmlFormatSpecification implements AutoConfigInf{
                         }
                         break;
 
-                    case CLASS:
-                        try {
-                            JSONArray jsonArray1 = function.getJSONArray(e.getMarking());
-                            for (int j = 0; j < jsonArray1.length(); j++) {
-                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
-                                if (jsonObject.length()==0){
-                                    throw  new  RuntimeException(e.getMarking()+":不能为空");
-                                }
-                            }
-                        } catch (JSONException e1) {
-                            throw  new RuntimeException(e.getMarking()+"有错误!");
-                        }
-                        break;
+//                    case CLASS:
+//                        try {
+//                            JSONArray jsonArray1 = function.getJSONArray(e.getMarking());
+//                            for (int j = 0; j < jsonArray1.length(); j++) {
+//                                JSONObject jsonObject = jsonArray1.getJSONObject(j);
+//                                if (jsonObject.length()==0){
+//                                    throw  new  RuntimeException(e.getMarking()+":不能为空");
+//                                }
+//                            }
+//                        } catch (JSONException e1) {
+//                            throw  new RuntimeException(e.getMarking()+"有错误!");
+//                        }
+//                        break;
                     default:
                         try {
                             if (!e.getRequired()) break;

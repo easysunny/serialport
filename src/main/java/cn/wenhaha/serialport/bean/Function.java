@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Function {
+public class Function implements IFunction{
 
     private String name;
     private String address;
     private String className;
+    private String handleName;
+    private String resultName;
     private SendData sendData;
     private Map<String,String> mapData;
     private JSONObject function;
@@ -19,11 +21,42 @@ public class Function {
     private List<String> addLengthKeys;
     //数据起始位置
     private String index;
+    //处理后的数据
+    private Object data ;
+    //是否正常
+    private  Boolean normal;
+
 
 
     public Function() {
+        className="cn.wenhaha.serialport.processing.DefaultMsgProcessing";
         mapData=new HashMap<>(10);
         addLengthKeys=new ArrayList<>(10);
+    }
+
+
+    public String getHandleName() {
+        return handleName;
+    }
+
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
+    }
+
+    public String getResultName() {
+        return resultName;
+    }
+
+    public void setResultName(String resultName) {
+        this.resultName = resultName;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public Boolean isNormal() {
+        return normal;
     }
 
     public JSONObject getFunction() {
@@ -98,5 +131,11 @@ public class Function {
                 ", className='" + className + '\'' +
                 ", sendData=" + sendData +
                 '}';
+    }
+
+    @Override
+    public void doComplete(Object object, boolean normal) {
+        this.data=object;
+        this.normal=normal;
     }
 }

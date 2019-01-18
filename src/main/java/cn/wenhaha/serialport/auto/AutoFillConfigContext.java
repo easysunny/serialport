@@ -108,13 +108,7 @@ public class AutoFillConfigContext implements AutoConfigInf{
             f.setAddress(function.getJSONObject(LabelFunctionEnum.MARK.getMarking()).getString("value").toLowerCase());
             f.setName(function.getString(LabelFunctionEnum.NAME.getMarking()));
             fillingMapFunctionData(function,f);
-            String className = null;
-            try {
-                className = function.getJSONArray(LabelFunctionEnum.CLASS.getMarking()).getJSONObject(0).getString("content");
-            } catch (JSONException e) {
-                className = function.getJSONArray(LabelFunctionEnum.CLASS.getMarking()).getJSONObject(0).getString("value");
-            }
-            f.setClassName(className);
+
 
             //填充可能加入计算长度的字段
             List<String> addLength = XmlJsonUtils.containAttributeElement(function, "addLength");
@@ -129,7 +123,21 @@ public class AutoFillConfigContext implements AutoConfigInf{
             if(!function.isNull(LabelFunctionEnum.INDEX.getMarking()))
                 f.setIndex(function.getString(LabelFunctionEnum.INDEX.getMarking()));
 
+            if(!function.isNull(LabelFunctionEnum.Handle.getMarking()))
+                f.setHandleName(function.getString(LabelFunctionEnum.Handle.getMarking()));
 
+            if(!function.isNull(LabelFunctionEnum.Result.getMarking()))
+                f.setResultName(function.getString(LabelFunctionEnum.Result.getMarking()));
+
+            if(!function.isNull(LabelFunctionEnum.CLASS.getMarking())){
+                String className = null;
+                try {
+                    className = function.getJSONArray(LabelFunctionEnum.CLASS.getMarking()).getJSONObject(0).getString("content");
+                } catch (JSONException e) {
+                    className = function.getJSONArray(LabelFunctionEnum.CLASS.getMarking()).getJSONObject(0).getString("value");
+                }
+                f.setClassName(className);
+            }
 
 
             Function function1 = serialPortConfigContext.getMapFunction().get(f.getName());

@@ -10,16 +10,36 @@ import cn.wenhaha.serialport.util.crc.Crc16;
 public abstract class FunctionMsg{
 
     private Function function;
+    //数据处理方式
+    private SerialPortHandle serialPortHandle;
 
-    public  FunctionMsg(Function function){
-        this.function=function;
+    //数据处理的消费段
+    private SerialPortResult serialPortResult;
+
+
+    public FunctionMsg(Function function) {
+        this.function = function;
     }
-
 
     public Function getFunction() {
         return function;
     }
 
+    public SerialPortHandle getSerialPortHandle() {
+        return serialPortHandle;
+    }
+
+    public void setSerialPortHandle(SerialPortHandle serialPortHandle) {
+        this.serialPortHandle = serialPortHandle;
+    }
+
+    public SerialPortResult getSerialPortResult() {
+        return serialPortResult;
+    }
+
+    public void setSerialPortResult(SerialPortResult serialPortResult) {
+        this.serialPortResult = serialPortResult;
+    }
 
     public  void send(String  data){
 

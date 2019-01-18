@@ -20,6 +20,20 @@ public class DefaultMsgProcessing extends FunctionMsg {
 
     @Override
     public void read(String name, String[] data, List<String> allData) {
+        Function function = getFunction();
+        getSerialPortHandle().handle(function,data);
+        Boolean normal = function.isNormal();
+        getSerialPortResult().process(name,function.getData(),allData);
+        if(normal!=null){
+            if (normal){
+                getSerialPortResult().success(name,function.getData(),allData);
+
+            }else{
+                getSerialPortResult().failure(name,function.getData(),allData);
+            }
+
+        }
+
         if (SeriaPortConetxt.getDebug())
             Log.d(TAG, name+"----read: "+ Arrays.toString(data));
     }
