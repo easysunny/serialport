@@ -169,7 +169,7 @@ public class DataUtil {
      * @return
      */
     public static byte readByteMesg(){
-//        if (list.size()==0){
+//        if (list==null||list.size()==0){
 //            initList();
 //        }
 //        return   list.remove(0);
