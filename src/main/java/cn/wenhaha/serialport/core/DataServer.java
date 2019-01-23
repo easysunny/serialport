@@ -4,7 +4,7 @@ package cn.wenhaha.serialport.core;
 import android.util.Log;
 
 
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -63,7 +63,7 @@ public class DataServer implements Observer {
                     byte[] bytes = ByteUtil.toBytes(data);
                     //如果不匹配
                     if (!Crc16.checkCRC(bytes)){
-                       return;
+                        return;
                     }
 
                     //取出对应的地址对象
@@ -88,27 +88,20 @@ public class DataServer implements Observer {
 
                     //回调
                     functionMsg.read(function.getName(),data_str,datas);
+                    Log.d(TAG, "接收到的数据为：: "+datas);
 
                 }
 
 
-                System.out.println(lists);
             } catch (Exception e) {
                 Log.e(TAG, "报错: "+e);
             }
 
 
-            String logm="";
-            for (String s :
-                    hexString) {
-                logm += s;
-            }
 
-            Log.d(TAG, "接收到的数据为：: "+logm);
-            Log.d(TAG, "接收到的数据为：: "+hexString.length);
+        }
+
     }
-
-}
 
 
     /**
@@ -120,7 +113,7 @@ public class DataServer implements Observer {
         //判断是否有指定位置
         String index = function.getIndex();
         if (index!=null){
-              length= ProtocolUtil.indexPosition(index);
+            length= ProtocolUtil.indexPosition(index);
         }else {
             length= ProtocolUtil.indexPosition(LabelRootEnum.FUNCTION.getMarking());
         }

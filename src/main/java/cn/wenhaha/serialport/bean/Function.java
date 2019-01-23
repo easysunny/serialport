@@ -26,15 +26,23 @@ public class Function implements IFunction{
     //是否正常
     private  Boolean normal;
 
-
+    //自动发送
+    private Boolean autoSend;
 
     public Function() {
         className="cn.wenhaha.serialport.processing.DefaultMsgProcessing";
         mapData=new HashMap<>(10);
         addLengthKeys=new ArrayList<>(10);
+        autoSend=true;
     }
 
+    public Boolean getAutoSend() {
+        return autoSend;
+    }
 
+    public void setAutoSend(Boolean autoSend) {
+        this.autoSend = autoSend;
+    }
     public String getHandleName() {
         return handleName;
     }

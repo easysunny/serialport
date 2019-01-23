@@ -27,6 +27,8 @@ public class SerialPortConfigContext {
     //需要加入计算长度的标签
     private List<String> addLengthKeys;
     private List<String> structure;
+    //全局发送标示
+    private  Boolean autoSend;
 
 
     private SerialPortConfigContext() {
@@ -34,12 +36,13 @@ public class SerialPortConfigContext {
         mapRootData=new HashMap<>(20);
         structure=new ArrayList<>(10);
         addLengthKeys=new ArrayList<>(10);
+        autoSend=true;
     }
 
 
     public  static  SerialPortConfigContext getSerialPortConfigContext(){
         if (serialPortConfigContext==null){
-             serialPortConfigContext = new SerialPortConfigContext();
+            serialPortConfigContext = new SerialPortConfigContext();
         }
         return serialPortConfigContext;
     }
@@ -130,5 +133,13 @@ public class SerialPortConfigContext {
 
     public void setStructure(List<String> structure) {
         this.structure = structure;
+    }
+
+    public Boolean getAutoSend() {
+        return autoSend;
+    }
+
+    public void setAutoSend(Boolean autoSend) {
+        this.autoSend = autoSend;
     }
 }

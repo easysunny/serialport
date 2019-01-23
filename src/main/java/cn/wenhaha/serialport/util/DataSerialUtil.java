@@ -1,7 +1,10 @@
 package cn.wenhaha.serialport.util;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.wenhaha.serialport.bean.Function;
@@ -16,6 +19,10 @@ import cn.wenhaha.serialport.enums.LabelRootEnum;
 public class DataSerialUtil {
 
     private static final String TAG = "DataSerialUtil";
+    private  static  String[] prevData;
+
+
+
     /**
      * 解析杂乱的数据
      * @return
@@ -29,7 +36,7 @@ public class DataSerialUtil {
         for(int i =0; i<hexString.length;i++){
             String s=hexString[i];
             //首次出现
-            if (s.equals(SeriaPortConetxt.getHead())&&headIndex<0){
+            if (s.equals(SeriaPortConetxt.getHead())){
                 try {
                     //有一组数据进来了
                     headIndex=i;
@@ -56,11 +63,29 @@ public class DataSerialUtil {
 
                 } catch (Exception e) {
                     //不是完整的数据包
-//                    Log.e(TAG, "analysisTotalData: "+e.getMessage());
+                    if (hexData.length==i+1){
+                        prevData=hexData;
+                    }
+                    Log.e(TAG, "数据包："+Arrays.toString(hexData)+"analysisTotalData: "+e.getMessage());
                     continue;
                 }finally {
                     //数据处理完毕
                     headIndex=-1;
+                }
+            }else{
+                //如果首头没有出现，就把上次有首头的才去拼接，尝试在试一次
+                if (prevData!=null&&prevData[0].equals(SeriaPortConetxt.getHead())){
+                    String[] hex=new String[prevData.length+hexData.length];
+                    for (int p=0;p<prevData.length;p++){
+                        hex[p]=prevData[p];
+                    }
+                    for (int h=prevData.length,j=0;j<hexData.length;h++,j++){
+                        hex[h]=hexData[j];
+                    }
+
+                    prevData=null;
+                    return DataSerialUtil.analysisTotalData(hex);
+
                 }
             }
         }

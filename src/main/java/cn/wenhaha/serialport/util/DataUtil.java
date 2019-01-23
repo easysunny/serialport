@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +29,22 @@ public class DataUtil {
     private static InputStream ttyS1InputStream;
     private  static OutputStream ttyS1OutputStream;
 
+    private static  List<Byte> list;
 
+    private static  void initList(){
+        list=new ArrayList<>();
+//        Byte[] d={(byte)0xa6,0x10,0x00, 0x3D, 0x09, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, (byte)0xFF, (byte)0xFF,(byte)0xFF, 0x3F, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00,0x00};
+        Byte[] d={(byte)0xa6,0x10,0x00, 0x02, 0x09,0x00, 0x0e,(byte)0xa1,0x10,0x00, 0x02, 0x09,0x00, 0x0e,0x0e};
+        for (int i = 0; i < d.length; i++) {
+            list.add(d[i]);
+        }
+
+    }
 
 
     public  static  void initialize(String serialPort){
         try {
-
+//            initList();
             serialttyS1 = new SerialPort(new File(serialPort),115200,0);
 
             ttyS1InputStream = serialttyS1.getInputStream();
@@ -48,19 +59,29 @@ public class DataUtil {
         }
     }
 
-
+    /**
+     * 建议手动发送调用此方法
+     * @param bytes
+     * @param sleep
+     */
     public static void sendMesg(final byte[] bytes,long sleep){
         try {
             Thread.sleep(sleep);
             String[] hexString = ByteUtil.getHexStrings(bytes, 0, bytes.length);
             ttyS1OutputStream.write(bytes);
+
             if (SeriaPortConetxt.getDebug()){
                 Log.d(TAG, "sendMesg: "+ Arrays.toString(hexString));
             }
         } catch (InterruptedException e) {
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "sendMesg: ",e );
         }catch (IOException e) {
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "IOException: "+e);
+        }catch (Exception e){
+            if (SeriaPortConetxt.getDebug())
+            Log.e(TAG, "sendMesg: ",e );
         }
 
     }
@@ -73,6 +94,7 @@ public class DataUtil {
      */
     public static void sendMesg(final byte[] bytes){
         try {
+            if (!SeriaPortConetxt.getAutoSend())return;
             Thread.sleep(SeriaPortConetxt.getMillisecond());
             String[] hexString = ByteUtil.getHexStrings(bytes, 0, bytes.length);
             if (SeriaPortConetxt.getDebug()){
@@ -80,10 +102,13 @@ public class DataUtil {
             }
             ttyS1OutputStream.write(bytes);
         } catch (IOException e) {
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "IOException: "+e);
         } catch (InterruptedException e) {
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "InterruptedException: "+e);
         } catch (Exception e){
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "Exception: "+e);
         }
 
@@ -93,10 +118,9 @@ public class DataUtil {
     /**
      * 获取
      */
+    @Deprecated
     public static void rendMesg(final DataRead dataRead){
 //        byte[] d={(byte)0xa6,0x10,0x00, 0x3D, 0x09, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, (byte)0xFF, (byte)0xFF,(byte)0xFF, 0x3F, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00, 0x00, 0x00, 0x01, 0x00, 0x00,0x00,0x00};
-//        byte[] d={ (byte)0xa6,0x10,0x00, 0x03, 0x08, 0x00, 0x01, (byte) 0x9F,(byte) 0xDC};
-//        byte[] d={ (byte)0xa6,0x10,0x00, 0x3D, 0x09, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, (byte)0xFF, (byte)0xFF, (byte)0xFF, 0x3F, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,0x00,0x00};
 //        dataRead.dataHeadle(d);
         if (ttyS1InputStream==null)
             return;
@@ -104,13 +128,14 @@ public class DataUtil {
         int size= 0;
         try {
             Thread.sleep(SeriaPortConetxt.getReadSpeed());
-            size = ttyS1InputStream.read(b);
-
+            size += ttyS1InputStream.read(b);
+            SeriaPortConetxt.setAutoSend(true);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }catch (Exception e){
+            if (SeriaPortConetxt.getDebug())
             Log.e(TAG, "Exception: "+e);
         }
         if(size!=0){
@@ -122,7 +147,7 @@ public class DataUtil {
             String[] hexString = ByteUtil.getHexStrings(data, 0, data.length);
 
             if (SeriaPortConetxt.getDebug())
-                Log.d(TAG, "rendMesg: "+hexString);
+                Log.d(TAG, "rendMesg: "+Arrays.toString(hexString));
 
             dataRead.dataHeadle(data);
 
@@ -130,6 +155,68 @@ public class DataUtil {
 
         }
     }
+
+    /**
+     * 获取
+     */
+    public static void rendMesg(final DataRead dataRead,Long log,int count){
+        byte[] bytes = readMesg(log, count);
+        dataRead.dataHeadle(bytes);
+    }
+
+    /**
+     * 只读取一个字节
+     * @return
+     */
+    public static byte readByteMesg(){
+//        if (list.size()==0){
+//            initList();
+//        }
+//        return   list.remove(0);
+        if (ttyS1InputStream==null)
+            throw new RuntimeException("找不到串口设备");
+
+        byte[] b=new byte[1];
+        try {
+            int read=ttyS1InputStream.read(b);
+            if (read==0)  throw new RuntimeException("数据为空");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b[0];
+    }
+
+
+    /**
+     * 在用户指定时间内读取
+     */
+    public static byte[] readMesg(Long log,int count){
+        long startTime = System.currentTimeMillis();
+        byte[] b = new byte[count];
+
+        int i=0;
+        do {
+            try {
+                byte data= DataUtil.readByteMesg();
+                startTime=System.currentTimeMillis();
+                b[i]=data;
+            } catch (Exception e) {
+                if (SeriaPortConetxt.getDebug())
+                Log.e(TAG, "readMesg: "+e);
+            }
+            long endTime = System.currentTimeMillis();
+            if (endTime-startTime>=log){
+                return null;
+            }
+            i=i+1;
+
+        }while (i<count);
+        return b;
+    }
+
+
+
+
 
 
     /**

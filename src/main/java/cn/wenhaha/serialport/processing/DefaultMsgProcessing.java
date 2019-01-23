@@ -7,6 +7,7 @@ import java.util.List;
 
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.FunctionMsg;
+import cn.wenhaha.serialport.bean.SerialPortResult;
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
 
 public class DefaultMsgProcessing extends FunctionMsg {
@@ -23,13 +24,14 @@ public class DefaultMsgProcessing extends FunctionMsg {
         Function function = getFunction();
         getSerialPortHandle().handle(function,data);
         Boolean normal = function.isNormal();
-        getSerialPortResult().process(name,function.getData(),allData);
-        if(normal!=null){
+        SerialPortResult serialPortResult = getSerialPortResult();
+        if(normal!=null&&serialPortResult!=null){
+            serialPortResult.process(name,function.getData(),allData);
             if (normal){
-                getSerialPortResult().success(name,function.getData(),allData);
+                serialPortResult.success(name,function.getData(),allData);
 
             }else{
-                getSerialPortResult().failure(name,function.getData(),allData);
+                serialPortResult.failure(name,function.getData(),allData);
             }
 
         }

@@ -17,7 +17,9 @@ import cn.wenhaha.serialport.context.SerialPortConfigContext;
 import cn.wenhaha.serialport.core.DataServer;
 import cn.wenhaha.serialport.core.FunctionSendData;
 import cn.wenhaha.serialport.core.Monitoring;
+import cn.wenhaha.serialport.enums.LabelRootEnum;
 import cn.wenhaha.serialport.util.DataUtil;
+import cn.wenhaha.serialport.util.ProtocolUtil;
 
 /**
  * 数据发送和读取
@@ -46,18 +48,14 @@ public class SerialPortData {
 
 
     public void read() {
+        final int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
-                    try {
-                        Thread.sleep(SeriaPortConetxt.getReadSpeed());
-                    } catch (InterruptedException e) {
-
-                    }
-
-//                    monitoring.dataHeadle(new byte[]{(byte)0x9a, 0x0f, 0x0f , 0x02, 0x0D,0x01 , 0x00, 0x10, 0x00, (byte) 0x98, (byte) 0x85});
-                    DataUtil.rendMesg(monitoring);
+                //                    monitoring.dataHeadle(new byte[]{(byte)0x9a, 0x0f, 0x0f , 0x02, 0x0D,0x01 , 0x00, 0x10, 0x00, (byte) 0x98, (byte) 0x85});
+                    DataUtil.rendMesg(monitoring,SeriaPortConetxt.getReadSpeed(),lenth_index+1);
                 }
             }
         });
