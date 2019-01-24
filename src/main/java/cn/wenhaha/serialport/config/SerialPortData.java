@@ -48,14 +48,31 @@ public class SerialPortData {
 
 
     public void read() {
-        final int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
+//
+//        //获取长度位置
+//        int lenth_index=ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
+//
+//        int difference=0;
+
+        Function function = ProtocolUtil.fundByFunctionFirst().getFunction();
+        String index =function .getIndex();
+        int i=0;
+        if (index==null){
+           i= ProtocolUtil.indexPosition(LabelRootEnum.FUNCTION.getMarking());
+//            difference=i-lenth_index-1;
+        }else{
+            i = ProtocolUtil.indexPosition(index);
+//            difference=i-lenth_index-1;
+        }
+
+        final int lenth =i;
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
                 //                    monitoring.dataHeadle(new byte[]{(byte)0x9a, 0x0f, 0x0f , 0x02, 0x0D,0x01 , 0x00, 0x10, 0x00, (byte) 0x98, (byte) 0x85});
-                    DataUtil.rendMesg(monitoring,SeriaPortConetxt.getReadSpeed(),lenth_index+1);
+                    DataUtil.rendMesg(monitoring,SeriaPortConetxt.getReadSpeed(),lenth);
                 }
             }
         });

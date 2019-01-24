@@ -103,8 +103,21 @@ public class ProtocolUtil {
     }
 
 
-
-
+    /**
+     * 获取第一个Function对象
+     * @return
+     */
+    public static FunctionMsg fundByFunctionFirst(){
+        if (functionMap==null || functionMsgMap.size()==0){
+            functionMsgMap = FunctionConetxt.getSerialPortConfigContext().getFunctionMsgMap();
+        }
+        for (Map.Entry<String, FunctionMsg> entry : functionMsgMap.entrySet()) {
+            String key = entry.getKey();
+            FunctionMsg functionMsg = functionMsgMap.get(key);
+            return functionMsg;
+        }
+        return null;
+    }
 
 
 
