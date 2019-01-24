@@ -22,9 +22,33 @@ public class DefaultMsgProcessing extends FunctionMsg {
     @Override
     public void read(String name, String[] data, List<String> allData) {
         Function function = getFunction();
+        //处理
         getSerialPortHandle().handle(function,data);
+        noticeResult(getSerialPortResult(),name,allData);
+
+        List<SerialPortResult> serialPortResults = SeriaPortConetxt.getSerialPortResults();
+        if (serialPortResults!=null){
+            //通知监听者的方法
+            for (SerialPortResult s :serialPortResults) {
+                noticeResult(s,name,allData);
+            }
+        }
+        
+
+        if (SeriaPortConetxt.getDebug())
+            Log.d(TAG, name+"----read: "+ Arrays.toString(data));
+    }
+
+
+    /**
+     * 通知 结果接口
+     * @param serialPortResult
+     * @param name
+     * @param allData
+     */
+    private void noticeResult(SerialPortResult serialPortResult,String name,List<String> allData){
+        Function function = getFunction();
         Boolean normal = function.isNormal();
-        SerialPortResult serialPortResult = getSerialPortResult();
         if(normal!=null&&serialPortResult!=null){
             serialPortResult.process(name,function.getData(),allData);
             if (normal){
@@ -33,11 +57,7 @@ public class DefaultMsgProcessing extends FunctionMsg {
             }else{
                 serialPortResult.failure(name,function.getData(),allData);
             }
-
         }
-
-        if (SeriaPortConetxt.getDebug())
-            Log.d(TAG, name+"----read: "+ Arrays.toString(data));
     }
 
 

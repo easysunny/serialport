@@ -3,20 +3,40 @@ package cn.wenhaha.serialport.context;
 import android.content.Context;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import cn.wenhaha.serialport.SerialPortResourceContext;
 import cn.wenhaha.serialport.bean.FunctionMsg;
+import cn.wenhaha.serialport.bean.SerialPortResult;
 
 public class SeriaPortConetxt {
 
     private  static  SerialPortConfigContext serialPortConfigContext=SerialPortConfigContext.getSerialPortConfigContext();
     private  static  FunctionConetxt functionConetxt=FunctionConetxt.getSerialPortConfigContext();
     private static Map<String,Object> data=new HashMap<>();
+    private static List<SerialPortResult> serialPortResults;
 
     public  static  boolean getDebug(){
         boolean debug = serialPortConfigContext.isDebug();
         return debug;
+    }
+
+    public static void addListeningResult(SerialPortResult serialPortResult){
+        if (serialPortResults==null){
+            serialPortResults=new LinkedList();
+        }
+        serialPortResults.add(serialPortResult);
+    }
+
+    public static  boolean removeListeningResult(SerialPortResult serialPortResult){
+        boolean remove = serialPortResults.remove(serialPortResult);
+        return remove;
+    }
+
+    public static List<SerialPortResult> getSerialPortResults() {
+        return serialPortResults;
     }
 
     public  static  String getSerialPort(){
