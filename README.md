@@ -1,63 +1,24 @@
+﻿
 # serialport--Android Model
-> 迈冲科技串口开发框架，通过配置xml,省去处理发送和读取的代码，更加专注于其他逻辑。
-
-# 演示案列
-[https://gitee.com/wyndem/serialport-example/tree/master/](https://gitee.com/wyndem/serialport-example/tree/master/)
-
-
-
-
-
+> 通过配置xml,省去处理发送和读取的代码，专注于数据处理逻辑。
 
 # 使用文档
 
-### xml说明：
 
-#### 内置标签
+##快速入门
 
+请在`Activity`中添加一下代码：
+```
+       try {
+            SerialPortResourceContext.initialize(this,R.raw.c600);
+        } catch (Exception e1) {
+            throw  new RuntimeException(e1);
+        }
+```
+> 注意：建议在给组件添加事件之前添加以上代码。
 
-##### 必填的
-|标签         | 说明           | 属性    | 类型    |是否必须  |
-| ------------- |:-------------:|:-----:|:-----:|:-----:|
-| head      | 帧头段 | value | 16进制 |是|
-| serialport      | 串口路径      |  value |字符串|是|
-| structure | 发送的结构顺序，逗号分割     |    NULL | 无|是|
-| function | 具体发送的节点     |    name、class | 无|是|
-
-
-
-#####  非选
-
-|标签         | 说明           | 属性    | 类型    |是否必须  | 默认  |
-| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
-| crc      | crc校验，暂时只有:16 | value | 整型 | 否 | 16 |
-| length      | 数据的长度，如果为空，则是更具发送数据的长度改变 | value | 整型 | 否 | 动态 |
-| debug      | 开启后，会在logcat中打印 数据信息  | value | 布尔型 | 否 | false |
-| millisecond      | 发送的间隔时间，单位：毫秒 | value | 长整型 | 否 | 200 |
-| readspeed |     读取的间隔时间，单位：毫秒 | value | 长整型 | 否 | 20 |
-
-
-
-
-#### function 标签：
-|标签         | 说明           | 属性    | 类型    |是否必须  | 默认  |
-| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
-| mark      | 标识 | value | 16进制 | 是 | 无 |
-| class      | 用于接收和发送的类 | value | FunctionMsg | 是 | 无 |
-| send      | 如果发送的数据需要持续发送或需要发送多少次,且发送值不变可以用到该标签 | value | 16进制 | 否 | 无 |
-
-> class标签:也可作为function标签的属性
-
-
-#### 属性说明：
-|属性         | 说明             | 类型    | 默认  |
-| ------------- |:-------------:|:-----:|:-----:|
-| value      | 一般为16进制的值，只能有一个16进制，可以用在任何标签中  | 16进制、字符串、布尔值| 无 |
-| addLength      | 在计算长度时将该标签的值也加入计算中，可以用在任何标签中 | 布尔值| false |
-| number      | send标签里的，表示发送的次数 | 整型| -1表示无限次 |
-
-
-
+## 代码说明：
+R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明。
 
 实例:
 ```
@@ -89,7 +50,7 @@
 
 
     <!--模块-->
-    <function name="ATT" class="cn.wenhaha.serialport.processing.DefaultMsgProcessing" >
+    <function name="ATT" class="cn.wenhaha.serialport.processing.DefaultMsgProcessing" index="msg">
         <!--标识-->
         <mark value="01"/>
         <!--需要自动发送数据，就加入该标签.number标识发送的次数，-1为无数次-->
@@ -104,6 +65,12 @@
         <!---自定义标签   结束-->
     </function>
 
+  <function name="GetAllKnobInfo"
+        handle="com.hnsbtx.communicationprotocol.handle.controlinformation.GetAllKnobInfo"
+        result="com.hnsbtx.communicationprotocol.handle.controlinformation.GetAllKnobInfo"  index="msg">
+        <msg value="01" addLength="true"/>
+        <send value="00" number="0"/>
+    </function>
 
 
     <!--发送的顺序-->
@@ -116,14 +83,75 @@
 ```
 
 
-##### 关于自定义标签
+### xml说明：
+
+#### 内置标签（Protocol）
+
+
+##### 必填的
+|标签         | 说明           | 属性    | 类型    |是否必须  |
+| ------------- |:-------------:|:-----:|:-----:|:-----:|
+| head      | 帧头段 | value | 16进制 |是|
+| serialport      | 串口路径      |  value |字符串|是|
+| structure | 发送的结构顺序，逗号分割     |    NULL | 无|是|
+| function | 具体发送的节点     |   较多| 无|是|
+
+
+
+#####  非选
+
+|标签         | 说明           | 属性    | 类型    |是否必须  | 默认  |
+| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
+| crc      | crc校验，暂时只有:16 | value | 整型 | 否 | 16 |
+| length      | 数据的长度，如果为空，则是根具发送数据的长度改变 | value | 整型 | 否 | 动态 |
+| debug      | 开启后，会在logcat中打印 数据信息  | value | 布尔型 | 否 | false |
+| millisecond      | 发送的间隔时间，单位：毫秒 | value | 长整型 | 否 | 200 |
+| readspeed |     读取的间隔时间，单位：毫秒 | value | 长整型 | 否 | 20 |
+
+
+**在`Protocol`标签中，可以随意添加任意标签，这些标签可以用作于`structure`中。
+但必须要保持一个约束，就是必须含有`value`属性，且只能存放一位长度的值。**
+
+
+---
+
+
+### function 标签：
+|标签         | 说明           | 属性    | 类型    |是否必须  | 默认  |
+| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
+| mark      | 标识 | value | 16进制 | 是 | 无 |
+| class      | 用于接收和发送的类 | value | FunctionMsg | 否 | 无 |
+| send      | 如果发送的数据需要持续发送或需要发送多少次,且发送值不变可以用到该标签 | value | 16进制 | 否 | 无 |
+
+> class标签:也可作为function标签的属性
+
+
+#### 属性说明：
+|属性         | 说明             | 类型    | 默认  |
+| ------------- |:-------------:|:-----:|:-----:|
+| value      | 一般为16进制的值，只能有一个16进制，可以用在任何标签中  | 16进制、字符串、布尔值| 无 |
+| addLength      | 在计算长度时将该标签的值也加入计算中，可以用在任何标签中 | 布尔值| false |
+| number      | send标签里的，表示发送的次数 | 整型| -1表示无限次 |
+| index      | 数据位从哪里开始，可选的范围为function下的子标签 | String | function的位置 |
+| handle      | 指定实现了`SerialPortHandle`接口的类，用于处理当前数据 | SerialPortHandle类型 | 无 |
+| result      | 指定实现了`SerialPortResult`接口的类，用于处理获得结果的逻辑| SerialPortResult类型 | 无 |
+
+
+**在`function`标签中，可以随意添加任意标签，这些标签可以用作于`structure`中。
+但必须要保持一个约束，就是必须含有`value`属性，且只能存放一位长度的值，多个`function`标签中，一定要保持`function`下的子标签的同步性，属性也要同步**
+
+---
+## 提醒
+
+### 关于自定义标签
 用户可以自定义标签，**但是只能在根标签和function标签上自定义**，其他地方的自定义标签都会被无视。每个自定义标签中必须得含有value属性，否则就会报错。
 
 
-##### function中class所指向的类
+### function中class所指向的类
 
 这些类必须要是继承`FunctionMsg`中的类，才能够被使用。当然如果你不想创建任何类，也可以指定`cn.wenhaha.serialport.processing.DefaultMsgProcessing`类，这个类已经继承了`FunctionMsg`，所以可以被指向，这样做的话，你就处理不了主控板回应给你的数据了。开启`debug`模式后，`DefaultMsgProcessing`会打印出接收到的数据。
 
+---
 
 ###  发送数据
 
@@ -149,10 +177,119 @@
 
 
 ###  接收数据
+接收方式支持3种，分别为 广播方式、类的方式、接口方式。**其中，类的方式和接口方式只能出现一种，广播方式可出现多种但必须是使用接口的方式才能使用广播**
+### 接口的方式
+在`function`，需要指定`handle`属性和`result`属性，具体看function 标签中属性说明的表格。
+
+SerialPortHandle 接口需要实现：handle(IFunction function, String[] data)
+其中`function`属性是将处理好的数据和结果保存，`data`数据是原生的数据段，没有前部分和crc部分。
+```
+    @Override
+    public void handle(IFunction function, String[] data) {
+
+        if (Integer.parseInt(data[1],16)!=0){
+            //出现异常
+            function.doComplete(-1,false);
+            return;
+        }
+        Integer[] info=new Integer[2];
+        //正向功率
+        info[0]=Integer.parseInt(data[4],16)+Integer.parseInt(data[5],16)*256;
+        //反向功率
+        info[1]=Integer.parseInt(data[6],16)+Integer.parseInt(data[7],16)*256;
+        //无异常
+        function.doComplete(info,true);
+    }
+```
+
+
+SerialPortResult 接口：需要实现3个方法：`process`、`success`、`failure`，它们都有对应的3个参数：
+
+ - name 当前过来的Function名字
+ - data SerialPortHandle接口保存的数据
+ - allData 原生的数据，没有做过处理，也包含了头和crc
+
+方法的执行顺序:
+
+ - process：不管异常还是正常都会第一个触发
+ - success：正常才会被触发
+ - failure：异常才会被触发
+```
+ @Override
+    public void process(String name, Object data, List<String> allData) {
+        view=(MainContract.View) SeriaPortConetxt.getData().get("view");
+
+    }
+
+    @Override
+    public void success(String name, Object data, List<String> allData) {
+        view.cancelHighlighting(R.id.positive_title,R.id.positive_value,R.id.reverse_title,R.id.reverse_value);
+        Integer[] info=(Integer[])data;
+        view.updataPowerInfo(info[0],info[1]);
+    }
+
+    @Override
+    public void failure(String name, Object data, List<String> allData) {
+        view.alarmUi("告警","功率发生告警",R.id.positive_title,R.id.positive_value,R.id.reverse_title,R.id.reverse_value);
+    }
+
+```
+ 
+####类的方式
+
+在xml中添加`class`属性，其中该类必须要继承`FunctionMsg`。然后实现`read`方法就可以了。
+
+分别参数的含义：
+
+ - name： 当前过来的Function名字
+ - data： 原生的数据段，没有前头 
+ - allData 原生的数据，没有做过处理，也包含了头和crc
+
 当接收到数据后，对应的function所指向的类中`read`方法就会被调用。其中name参数名指的是`function`标签中`name`的属性值，data参数名就是数据了，**数据已经去除了头和尾，只有数据。**`allData`是完整的数据体，如果`data`数据处理不正确，可以用`allData`来自行处理。
 
 
 
+#### 广播
+如果选择类的方式。则不能使用广播模式。广播方式的存在只限于接口方式。对于广播方式只需要实现`SerialPortResult`接口，然后在调用以下代码加入监听即可。关于`SerialPortResult`接口说明已经在接口方式中诉说。
+
+    SeriaPortConetxt.addListeningResult(SerialPortResult serialPortResult);
+
+当然推荐在构成函数内即可完成添加：
+
+    public class ServerThread extends Thread implements SerialPortResult{
+
+
+    public ServerThread() {
+        SeriaPortConetxt.addListeningResult(this);
+    }
+
+
+# 相关API
+
+## 全局
+### 设置自动发送(默认)
+
+    SeriaPortConetxt.setAutoSend(true);
+
+### 设置停止自动发送
+
+    SeriaPortConetxt.setAutoSend(false);
+
+## 每个协议
+### 设置自动发送(默认)
+
+           SeriaPortConetxt.getFunctionMsg(name).getFunction().setAutoSend(true);
+      
+### 设置停止自动发送
+
+     SeriaPortConetxt.getFunctionMsg(name).getFunction().setAutoSend(false);  
+           
+## 数据传输
+
+### 设置
+     SeriaPortConetxt.getData().put(key,value);
+### 获取
+    SeriaPortConetxt.getData().get(key);
 
 
 # 开发文档
