@@ -5,7 +5,7 @@
 # 使用文档
 
 
-##快速入门
+## 快速入门
 
 请在`Activity`中添加一下代码：
 ```
@@ -235,7 +235,7 @@ SerialPortResult 接口：需要实现3个方法：`process`、`success`、`fail
 
 ```
  
-####类的方式
+#### 类的方式
 
 在xml中添加`class`属性，其中该类必须要继承`FunctionMsg`。然后实现`read`方法就可以了。
 
