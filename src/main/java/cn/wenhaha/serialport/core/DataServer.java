@@ -63,6 +63,7 @@ public class DataServer implements Observer {
                     byte[] bytes = ByteUtil.toBytes(data);
                     //如果不匹配
                     if (!Crc16.checkCRC(bytes)){
+                        Log.d(TAG, "当前CRC不正确");
                         return;
                     }
 

@@ -42,7 +42,7 @@ public class Crc16 {
         if (crc1[0]==crc[0]&&crc1[1]==crc[1]){
             return true;
         }
-        return true;
+        return false;
     }
 
     public static void putLong(byte[] bb, long x, int index) {
