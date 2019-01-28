@@ -172,6 +172,7 @@ R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明
            functionMsg .send("11 22  11 13 14 14 16 17 18");
 
 ```
+
 这样也可以拿到`FunctionMsg `类,在调用`send`方法即可。
 
 
@@ -214,6 +215,7 @@ SerialPortResult 接口：需要实现3个方法：`process`、`success`、`fail
  - process：不管异常还是正常都会第一个触发
  - success：正常才会被触发
  - failure：异常才会被触发
+ 
 ```
  @Override
     public void process(String name, Object data, List<String> allData) {
@@ -234,6 +236,10 @@ SerialPortResult 接口：需要实现3个方法：`process`、`success`、`fail
     }
 
 ```
+ 
+ 
+ 
+ 
  
 #### 类的方式
 
@@ -300,4 +306,4 @@ SerialPortResult 接口：需要实现3个方法：`process`、`success`、`fail
 
 
 #### 问题
-解析头部分 长度后面必须跟数据 Monitoring
+解析头部分 长度后面必须跟数据 Monitoring(已解决)

@@ -231,7 +231,6 @@ public class ByteUtil {
 
     public static String[] getHexStrings(byte[] b, int index, int count){
 
-        Integer.getInteger("9a",16);
         String[] str=new String[count];
         if (b == null || index < 0 || b.length < index + count ) {
             return null;
@@ -417,6 +416,39 @@ public class ByteUtil {
         }
         return newByte;
     }
+
+
+    /**
+     *  int 16位的值转 16 进制
+     * @param value
+     * @return 16进制
+     */
+    public static String[] integer16ToHexArrays(int value){
+
+        byte[] values = new byte[2];
+
+        values[0]=(byte) (value / 256);
+        values[1]=(byte) (value % 256);
+        return getHexStrings(values,0,values.length);
+    }
+
+
+
+
+    /**
+     *  int 16位的值转 16 进制
+     * @param value
+     * @return 16进制
+     */
+    public static String integer16ToHex(int value){
+
+        byte[] values = new byte[2];
+
+        values[0]=(byte) (value / 256);
+        values[1]=(byte) (value % 256);
+        return getHexString(values,0,values.length);
+    }
+
 
 
 }

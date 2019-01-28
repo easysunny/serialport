@@ -95,8 +95,7 @@ public class DataUtil {
      */
     public static void sendMesg(final byte[] bytes){
         try {
-            if (!SeriaPortConetxt.getAutoSend())return;
-            Thread.sleep(SeriaPortConetxt.getMillisecond());
+             Thread.sleep(SeriaPortConetxt.getMillisecond());
             String[] hexString = ByteUtil.getHexStrings(bytes, 0, bytes.length);
             if (SeriaPortConetxt.getDebug()){
                 Log.d(TAG, "sendMesg: "+ Arrays.toString(hexString));

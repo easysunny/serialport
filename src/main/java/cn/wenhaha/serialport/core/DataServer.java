@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.FunctionMsg;
@@ -23,13 +25,15 @@ public class DataServer implements Observer {
 
     private static final String TAG = "DataServer";
     private Observable monitoring;
-
+    private ExecutorService fixedThreadPool;
     private float value;
 
 
     public DataServer(Observable monitoring) {
         this.monitoring = monitoring;
         monitoring.addObserver(this);
+
+        fixedThreadPool= Executors.newFixedThreadPool (5);
     }
 
 
@@ -52,7 +56,7 @@ public class DataServer implements Observer {
                 int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.MARK.getMarking());
 
                 //遍历数据包
-                for (List<String> datas:lists){
+                for (final List<String> datas:lists){
 
 
                     //效验crc
@@ -69,8 +73,8 @@ public class DataServer implements Observer {
 
                     //取出对应的地址对象
                     String address = datas.get(address_index);
-                    Function function = ProtocolUtil.findByAddressFunction(address);
-                    FunctionMsg functionMsg = ProtocolUtil.fundByFucntionName(function.getName());
+                    final Function function = ProtocolUtil.findByAddressFunction(address);
+                    final FunctionMsg functionMsg = ProtocolUtil.fundByFucntionName(function.getName());
 
 
                     //获取返回来的数据长度
@@ -81,16 +85,23 @@ public class DataServer implements Observer {
 
                     //获取数据的起始位置
                     int function_index = getDataIndex(function);
-                    String[] data_str=new String[length];
+                    final String[] data_str=new String[length];
                     for (int i = function_index,j=0; i < function_index+length; i++,j++) {
                         data_str[j]=datas.get(i);
                     }
 
 
                     //回调
-                    functionMsg.read(function.getName(),data_str,datas);
-                    Log.d(TAG, "接收到的数据为：: "+datas);
 
+                    fixedThreadPool.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            String threadName = Thread.currentThread().getName();
+                            Log.v(TAG, "线程："+threadName+",正在执行第" + function.getName() + "个任务");
+                            functionMsg.read(function.getName(),data_str,datas);
+                        }
+                    });
+                    Log.d(TAG, "接收到的数据为：: "+datas);
                 }
 
 

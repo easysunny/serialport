@@ -70,7 +70,7 @@ public class SerialPortData {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                 while (true){
                 //                    monitoring.dataHeadle(new byte[]{(byte)0x9a, 0x0f, 0x0f , 0x02, 0x0D,0x01 , 0x00, 0x10, 0x00, (byte) 0x98, (byte) 0x85});
                     DataUtil.rendMesg(monitoring,SeriaPortConetxt.getReadSpeed(),lenth);
                 }
