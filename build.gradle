@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -5,6 +6,19 @@ buildscript {
     repositories {
         google()
         jcenter()
+=======
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+     buildToolsVersion "28"
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+>>>>>>> 8e8b51988c499bcd3b90ada677a35eb5e4b89949
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.2'
