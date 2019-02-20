@@ -1,0 +1,11 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml:1:1-2:39
+INJECTED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml:1:1-2:39
+INJECTED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml:1:1-2:39
+	package
+		ADDED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml:2:5-36
+		INJECTED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Administrator\Desktop\serialport\serialport\src\main\AndroidManifest.xml:1:11-69
