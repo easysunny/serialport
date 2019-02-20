@@ -4,6 +4,27 @@
 
 # 使用文档
 
+## 引入项目
+
+
+在你的根build.gradle文件下添加
+```
+ allprojects {
+     repositories {
+         maven { url "https://jitpack.io" }
+     }
+ }
+ 
+```
+
+在你的应用build.gradle文件下添加
+```
+dependencies {
+    implementation 'com.github.q191995501:serialport:v0.3'
+ }
+```
+
+
 
 ## 快速入门
 
