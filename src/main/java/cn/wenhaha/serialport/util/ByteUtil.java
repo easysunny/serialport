@@ -248,6 +248,16 @@ public class ByteUtil {
     }
 
 
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
 
     public static String getBinaryString(int d,int length){
         StringBuilder stringBuilder = new StringBuilder("");
@@ -402,9 +412,9 @@ public class ByteUtil {
 
     /**
      * 切割数组
-     * @param data
-     * @param index
-     * @param count
+     * @param data 数组
+     * @param index 从第几个开始
+     * @param count 切多少个
      * @return
      */
     public static byte[] cuttingArray(byte[] data,int index, int count){
@@ -443,12 +453,24 @@ public class ByteUtil {
     public static String integer16ToHex(int value){
 
         byte[] values = new byte[2];
-
         values[0]=(byte) (value / 256);
         values[1]=(byte) (value % 256);
         return getHexString(values,0,values.length);
     }
 
+
+    /**
+     *  int 16位的值转 16 进制
+     * @param value
+     * @return 16进制
+     */
+    public static String integer16ToHexHeightLow(int value){
+
+        byte[] values = new byte[2];
+        values[1]=(byte) (value / 256);
+        values[0]=(byte) (value % 256);
+        return getHexString(values,0,values.length);
+    }
 
 
 }

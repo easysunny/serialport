@@ -31,7 +31,7 @@ R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明
     <!--帧头-->
     <head value="9a"/>
     <!--crc-->
-    <crc value="16"/>
+    <crc value="CRC-16/ARC"/>
     <!--发送的频率，毫秒-->
     <millisecond value="200"/>
     <!--读取的频率-->
@@ -102,7 +102,7 @@ R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明
 
 |标签         | 说明           | 属性    | 类型    |是否必须  | 默认  |
 | ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
-| crc      | crc校验，暂时只有:16 | value | 整型 | 否 | 16 |
+| crc      | crc校验类型 | value | 字符串 | 否 | CRC-16/ARC |
 | length      | 数据的长度，如果为空，则是根具发送数据的长度改变 | value | 整型 | 否 | 动态 |
 | debug      | 开启后，会在logcat中打印 数据信息  | value | 布尔型 | 否 | false |
 | millisecond      | 发送的间隔时间，单位：毫秒 | value | 长整型 | 否 | 200 |
@@ -141,6 +141,62 @@ R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明
 但必须要保持一个约束，就是必须含有`value`属性，且只能存放一位长度的值，多个`function`标签中，一定要保持`function`下的子标签的同步性，属性也要同步**
 
 ---
+
+#### CRC 算法选项
+
+| Algorithm    | Poly  | Init    | RefIn  | 	RefOut| XorOut |
+| ------------- |:-------------:|:-----:|:-----:|:-----:|:-----:|
+| CRC-8      | 	0x07  | 	0x00 | false |false |0x00|
+| CRC-8/CDMA2000  | 0x9B | 	0xFF|  false |false |0x00|
+| CRC-8/DARC  | 0x39 | 	0x00|  false |true |0x00|
+| CRC-8/DVB-S2  |0xD5|	0x00|	false|	false|	0x00|
+| CRC-8/EBU  | 	0x1D|	0xFF|	true|	true|	0x00|
+| CRC-8/I-CODE  |0x1D|	0xFD|	false|	false|	0x00|
+| CRC-8/ITU  |0x1D|	0xFD|	false|	false|	0x00|
+| CRC-8/I-CODE  |0x1D|	0xFD|	false|	false|	0x00|
+|CRC-8/ITU | 0x07 | 0x00 | false | false | 0x55|
+|CRC-8/MAXIM |  0x31 | 0x00 | true | true | 0x00|
+|CRC-8/ROHC |   0x07 | 0xFF | true | true | 0x00|
+|CRC-8/WCDMA |   0x9B | 0x00 | true | true | 0x00|
+|CRC-16/CCITT-FALSE |   0x1021 | 0xFFFF | false | false | 0x0000|
+|CRC-16/ARC |   0x8005 | 0x0000 | true | true | 0x0000|
+|CRC-16/AUG-CCITT |   0x1021 | 0x1D0F | false | false | 0x0000|
+|CRC-16/BUYPASS |   0x8005 | 0x0000 | false | false | 0x0000|
+|CRC-16/CDMA2000 |   0xC867 | 0xFFFF | false | false | 0x0000|
+|CRC-16/DDS-110 | 0x8005 | 0x800D | false | false | 0x0000|
+|CRC-16/DECT-R |   0x0589 | 0x0000 | false | false | 0x0001|
+|CRC-16/DECT-X |   0x0589 | 0x0000 | false | false | 0x0000|
+|CRC-16/DNP |   0x3D65 | 0x0000 | true | true | 0xFFFF|
+|CRC-16/EN-13757 |  0x3D65 | 0x0000 | false | false | 0xFFFF|
+|CRC-16/GENIBUS |   0x1021 | 0xFFFF | false | false | 0xFFFF|
+|CRC-16/MAXIM |  0x8005 | 0x0000 | true | true | 0xFFFF|
+|CRC-16/MCRF4XX |   0x1021 | 0xFFFF | true | true | 0x0000|
+|CRC-16/RIELLO |  0x1021 | 0xB2AA | true | true | 0x0000|
+|CRC-16/T10-DIF |   0x8BB7 | 0x0000 | false | false | 0x0000|
+|CRC-16/TELEDISK |   0xA097 | 0x0000 | false | false | 0x0000|
+|CRC-16/TMS37157 |   0x1021 | 0x89EC | true | true | 0x0000|
+|CRC-16/USB | 0x8005 | 0xFFFF | true | true | 0xFFFF|
+|CRC-A | 0x1021 | 0xC6C6 | true | true | 0x0000|
+|CRC-16/KERMIT | 0x1021 | 0x0000 | true | true | 0x0000|
+|CRC-16/MODBUS |   0x8005 | 0xFFFF | true | true | 0x0000|
+|CRC-16/X-25 |  0x1021 | 0xFFFF | true | true | 0xFFFF|
+|CRC-16/XMODEM |   0x1021 | 0x0000 | false | false | 0x0000|
+ | CRC-32 | 0x04C11DB7 | 0xFFFFFFFF | true | true | 0xFFFFFFFF|
+ | CRC-32/BZIP2 |   0x04C11DB7 | 0xFFFFFFFF | false | false | 0xFFFFFFFF|
+ | CRC-32C |   0x1EDC6F41 | 0xFFFFFFFF | true | true | 0xFFFFFFFF|
+ | CRC-32D |   0xA833982B | 0xFFFFFFFF | true | true | 0xFFFFFFFF|
+ | CRC-32/MPEG-2 |   0x04C11DB7 | 0xFFFFFFFF | false | false | 0x00000000|
+ | CRC-32/POSIX |   0x04C11DB7 | 0x00000000 | false | false | 0xFFFFFFFF|
+ | CRC-32Q |   0x814141AB | 0x00000000 | false | false | 0x00000000|
+ | CRC-32/JAMCRC | 0x04C11DB7 | 0xFFFFFFFF | true | true | 0x00000000|
+ | CRC-32/XFER | 0x000000AF | 0x00000000 | false | false | 0x00000000|
+
+
+
+
+
+
+
 ## 提醒
 
 ### 关于自定义标签
@@ -179,7 +235,7 @@ R.raw.c600 对应的是一个xml文件，关于xml示列在下方有详细说明
 
 ###  接收数据
 接收方式支持3种，分别为 广播方式、类的方式、接口方式。**其中，类的方式和接口方式只能出现一种，广播方式可出现多种但必须是使用接口的方式才能使用广播**
-### 接口的方式
+### 接口的方式(推荐)
 在`function`，需要指定`handle`属性和`result`属性，具体看function 标签中属性说明的表格。
 
 SerialPortHandle 接口需要实现：handle(IFunction function, String[] data)

@@ -4,8 +4,10 @@ import java.util.List;
 
 import cn.wenhaha.serialport.context.SeriaPortConetxt;
 import cn.wenhaha.serialport.core.DataStitching;
+import cn.wenhaha.serialport.util.ByteUtil;
 import cn.wenhaha.serialport.util.DataUtil;
-import cn.wenhaha.serialport.util.crc.Crc16;
+import cn.wenhaha.serialport.util.crc.CrcCalculator;
+import cn.wenhaha.serialport.util.crc.CrcHelper;
 
 public abstract class FunctionMsg{
 
@@ -65,21 +67,14 @@ public abstract class FunctionMsg{
         data =s.replaceAll(" ", "");
 
         //转字节
-        byte[] bytes = DataUtil.toBytes(data);
+        byte[] bytes = ByteUtil.hexStringToByteArray(data);
 
         //加crc
-        byte[] data_bytes=addCrc(bytes);
+        byte[] data_bytes= CrcHelper.addCrc(bytes);
         return data_bytes;
     }
 
 
-    private byte[] addCrc(byte[] data){
-        switch (SeriaPortConetxt.getCrc()){
-            case 16:
-                return Crc16.addCrc(data);
-        }
-        throw new RuntimeException("暂时还不支持"+SeriaPortConetxt.getCrc()+"类型的CRC校验");
-    }
 
 
     public abstract  void  read(String name,String[] data,List<String> allData);

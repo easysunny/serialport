@@ -1,9 +1,6 @@
 package cn.wenhaha.serialport.auto;
 
-import com.example.x6.serial.SerialPort;
-
 import java.util.Map;
-import java.util.Set;
 
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.FunctionMsg;

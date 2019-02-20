@@ -17,7 +17,6 @@ public class SerialPortResourceContext {
 
     public static Context sContext;
     public static XmlToJson xmlToJson;
-    private static final String TAG = "SerialPortResourceConte";
 
     public static void initialize(Context context,int xml) throws Exception {
         if (sContext!=null&&xmlToJson!=null) return;
@@ -46,12 +45,6 @@ public class SerialPortResourceContext {
         SerialPortUtilAutoConfig.initialize();
         SerialPortData.initialize();
     }
-
-
-
-
-
-
 
 
 

@@ -3,8 +3,6 @@ package cn.wenhaha.serialport.core;
 
 import android.util.Log;
 
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -13,13 +11,13 @@ import java.util.concurrent.Executors;
 
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.FunctionMsg;
-import cn.wenhaha.serialport.context.SerialPortConfigContext;
+import cn.wenhaha.serialport.context.SeriaPortConetxt;
 import cn.wenhaha.serialport.enums.LabelFunctionEnum;
 import cn.wenhaha.serialport.enums.LabelRootEnum;
 import cn.wenhaha.serialport.util.ByteUtil;
 import cn.wenhaha.serialport.util.DataSerialUtil;
 import cn.wenhaha.serialport.util.ProtocolUtil;
-import cn.wenhaha.serialport.util.crc.Crc16;
+import cn.wenhaha.serialport.util.crc.CrcHelper;
 
 public class DataServer implements Observer {
 
@@ -66,7 +64,7 @@ public class DataServer implements Observer {
                     }
                     byte[] bytes = ByteUtil.toBytes(data);
                     //如果不匹配
-                    if (!Crc16.checkCRC(bytes)){
+                    if (!CrcHelper.checkCRC(bytes)){
                         Log.d(TAG, "当前CRC不正确");
                         return;
                     }
@@ -92,16 +90,21 @@ public class DataServer implements Observer {
 
 
                     //回调
-
                     fixedThreadPool.execute(new Runnable() {
                         @Override
                         public void run() {
-                            String threadName = Thread.currentThread().getName();
-                            Log.v(TAG, "线程："+threadName+",正在执行第" + function.getName() + "个任务");
-                            functionMsg.read(function.getName(),data_str,datas);
+                            if (SeriaPortConetxt.getDebug()) {
+                                String threadName = Thread.currentThread().getName();
+                                Log.v(TAG, "线程："+threadName+",正在执行" + function.getName() + "任务");
+                            }
+                            try {
+                                functionMsg.read(function.getName(),data_str,datas);
+                            } catch (Exception e) {
+                                Log.e(TAG, "run: ",e );
+                            }
                         }
                     });
-                    Log.d(TAG, "接收到的数据为：: "+datas);
+                    Log.d(TAG, "接收到的数据为:"+datas);
                 }
 
 

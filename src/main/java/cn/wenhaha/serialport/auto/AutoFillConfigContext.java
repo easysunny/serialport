@@ -10,11 +10,14 @@ import java.util.List;
 import cn.wenhaha.serialport.bean.Function;
 import cn.wenhaha.serialport.bean.SendData;
 import cn.wenhaha.serialport.config.AutoConfigInf;
+import cn.wenhaha.serialport.context.SeriaPortConetxt;
 import cn.wenhaha.serialport.context.SerialPortConfigContext;
 import cn.wenhaha.serialport.enums.LabelFunctionEnum;
 import cn.wenhaha.serialport.enums.LabelRootEnum;
 import cn.wenhaha.serialport.enums.LabelSendEnum;
+import cn.wenhaha.serialport.factory.CrcCalculatorFactory;
 import cn.wenhaha.serialport.util.XmlJsonUtils;
+import cn.wenhaha.serialport.util.crc.CrcCalculator;
 
 /**
  * 填充配置
@@ -54,8 +57,9 @@ public class AutoFillConfigContext implements AutoConfigInf{
 
 
         //下面可能为空
-        if(!XmlJsonUtils.getJsonObject().isNull(LabelRootEnum.CRC.getMarking()))
-            serialPortConfigContext.setCrc(XmlJsonUtils.getJsonObject().getJSONObject(LabelRootEnum.CRC.getMarking()).getInt("value"));
+        if(!XmlJsonUtils.getJsonObject().isNull(LabelRootEnum.CRC.getMarking())){
+            serialPortConfigContext.setCrc(XmlJsonUtils.getJsonObject().getJSONObject(LabelRootEnum.CRC.getMarking()).getString("value"));
+        }
 
 
         if(!XmlJsonUtils.getJsonObject().isNull(LabelRootEnum.LENGTH.getMarking()))
@@ -73,6 +77,12 @@ public class AutoFillConfigContext implements AutoConfigInf{
 
         if(!XmlJsonUtils.getJsonObject().isNull(LabelRootEnum.SERIALPORT.getMarking()))
             serialPortConfigContext.setSerialPort(XmlJsonUtils.getJsonObject().getJSONObject(LabelRootEnum.SERIALPORT.getMarking()).getString("value"));
+
+        CrcCalculator crcCalculator = CrcCalculatorFactory.getCrcCalculator(serialPortConfigContext.getCrc());
+        if (crcCalculator==null){
+            throw new RuntimeException("暂时还不支持"+ SeriaPortConetxt.getCrc()+"类型的CRC校验");
+        }
+        serialPortConfigContext.setCrcCalculator(crcCalculator);
 
     }
 

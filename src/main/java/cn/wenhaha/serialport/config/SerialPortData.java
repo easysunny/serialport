@@ -48,21 +48,16 @@ public class SerialPortData {
 
 
     public void read() {
-//
-//        //获取长度位置
-//        int lenth_index=ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
-//
-//        int difference=0;
 
         Function function = ProtocolUtil.fundByFunctionFirst().getFunction();
         String index =function .getIndex();
         int i=0;
         if (index==null){
            i= ProtocolUtil.indexPosition(LabelRootEnum.FUNCTION.getMarking());
-//            difference=i-lenth_index-1;
+
         }else{
             i = ProtocolUtil.indexPosition(index);
-//            difference=i-lenth_index-1;
+
         }
 
         final int lenth =i;

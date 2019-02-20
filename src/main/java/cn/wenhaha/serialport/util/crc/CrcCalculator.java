@@ -1,16 +1,14 @@
 package cn.wenhaha.serialport.util.crc;
 
-
-import static cn.wenhaha.serialport.util.crc.CrcHelper.ReverseBits;
-
+/**
+ * Created by anthony on 11.05.2017.
+ */
 public class CrcCalculator {
 
     public AlgoParams Parameters;
     public byte HashSize = 8;
     private long _mask = 0xFFFFFFFFFFFFFFFFL;
     private long[] _table = new long[256];
-
-    public static final byte[] TestBytes = new byte[]{49,50,51,52,53,54,55,56,57};
 
     public CrcCalculator(AlgoParams params)
     {
@@ -27,7 +25,7 @@ public class CrcCalculator {
 
     public long Calc(byte[] data, int offset, int length)
     {
-        long init = Parameters.RefOut ? ReverseBits(Parameters.Init, HashSize) : Parameters.Init;
+        long init = Parameters.RefOut ? CrcHelper.ReverseBits(Parameters.Init, HashSize) : Parameters.Init;
         long hash = ComputeCrc(init, data, offset, length);
         return (hash ^ Parameters.XorOut) & _mask;
     }
@@ -69,7 +67,7 @@ public class CrcCalculator {
         long r = (long)index;
 
         if (Parameters.RefIn)
-            r =ReverseBits(r, HashSize);
+            r = CrcHelper.ReverseBits(r, HashSize);
         else if (HashSize > 8)
             r <<= (HashSize - 8);
 
@@ -84,7 +82,7 @@ public class CrcCalculator {
         }
 
         if (Parameters.RefOut)
-            r = ReverseBits(r, HashSize);
+            r = CrcHelper.ReverseBits(r, HashSize);
 
         return r & _mask;
     }

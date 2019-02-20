@@ -21,13 +21,17 @@ public class DataSerialUtil {
     private static final String TAG = "DataSerialUtil";
     private  static  String[] prevData;
 
-
+    //获取标示位
+    private static int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.MARK.getMarking());
+    //获取长度
+    private static int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
 
     /**
      * 解析杂乱的数据
      * @return
      */
     public static List<List<String>> analysisTotalData(String[] hexData){
+
 
         String[] hexString=hexData;
         List<List<String>> analysisList=new ArrayList<>();
@@ -42,13 +46,10 @@ public class DataSerialUtil {
                     headIndex=i;
                     List<String> arr=new ArrayList<>();
 
-                    //获取标示位
-                    int address_index = ProtocolUtil.indexPosition(LabelFunctionEnum.MARK.getMarking());
                     String address=hexString[i+address_index];
                     Function function = ProtocolUtil.findByAddressFunction(address);
 
-                    //获取长度
-                    int lenth_index = ProtocolUtil.indexPosition(LabelRootEnum.LENGTH.getMarking());
+
                     //减去多余的数据位
                     int lenth=Integer.parseInt(hexString[i+lenth_index],16)
                             -function.getAddLengthKeys().size()

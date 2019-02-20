@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wenhaha.serialport.bean.Function;
+import cn.wenhaha.serialport.util.crc.CrcCalculator;
 
 
 /**
@@ -16,7 +17,8 @@ public class SerialPortConfigContext {
 
     private  static  SerialPortConfigContext serialPortConfigContext;
     private String head;
-    private Integer crc=16;
+    private String crc="CRC-16/MODBUS";
+    private CrcCalculator crcCalculator;
     private Integer length;
     private boolean debug=false;
     private String serialPort;
@@ -79,11 +81,11 @@ public class SerialPortConfigContext {
         this.head = head;
     }
 
-    public Integer getCrc() {
+    public String getCrc() {
         return crc;
     }
 
-    public void setCrc(Integer crc) {
+    public void setCrc(String crc) {
         this.crc = crc;
     }
 
@@ -141,5 +143,17 @@ public class SerialPortConfigContext {
 
     public void setAutoSend(Boolean autoSend) {
         this.autoSend = autoSend;
+    }
+
+    public static void setSerialPortConfigContext(SerialPortConfigContext serialPortConfigContext) {
+        SerialPortConfigContext.serialPortConfigContext = serialPortConfigContext;
+    }
+
+    public CrcCalculator getCrcCalculator() {
+        return crcCalculator;
+    }
+
+    public void setCrcCalculator(CrcCalculator crcCalculator) {
+        this.crcCalculator = crcCalculator;
     }
 }

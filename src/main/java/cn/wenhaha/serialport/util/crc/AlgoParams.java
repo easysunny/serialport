@@ -1,6 +1,10 @@
 package cn.wenhaha.serialport.util.crc;
 
-public class AlgoParams {
+/**
+ * Created by anthony on 11.05.2017.
+ */
+    public class AlgoParams
+    {
 
     public AlgoParams(String name, int hashSize, long poly, long init, boolean refIn, boolean refOut, long xorOut, long check)
     {

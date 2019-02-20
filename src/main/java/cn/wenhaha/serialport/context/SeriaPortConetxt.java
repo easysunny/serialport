@@ -10,6 +10,7 @@ import java.util.Map;
 import cn.wenhaha.serialport.SerialPortResourceContext;
 import cn.wenhaha.serialport.bean.FunctionMsg;
 import cn.wenhaha.serialport.bean.SerialPortResult;
+import cn.wenhaha.serialport.util.crc.CrcCalculator;
 
 public class SeriaPortConetxt {
 
@@ -45,7 +46,9 @@ public class SeriaPortConetxt {
 
     public  static  String getHead(){ return serialPortConfigContext.getHead();}
 
-    public  static  Integer getCrc(){ return serialPortConfigContext.getCrc();}
+    public  static  String getCrc(){ return serialPortConfigContext.getCrc();}
+
+    public  static CrcCalculator getCrcCalculator(){ return serialPortConfigContext.getCrcCalculator();}
 
 
     public  static  Long getMillisecond(){ return serialPortConfigContext.getMillisecond();}
