@@ -2,7 +2,7 @@ package cn.wenhaha.serialport.bean;
 
 import java.util.List;
 
-public interface SerialPortResult {
+public interface SerialPortResult<T> {
 
 
   
@@ -12,7 +12,7 @@ public interface SerialPortResult {
      * @param data 处理后的数据
      * @param allData 所有未的原生数据
      */
-    public  void process(String name,Object data, List<String> allData);
+    public  void process(String name,T data, List<String> allData);
 
     /**
      * 成功后调用的方法
@@ -20,7 +20,7 @@ public interface SerialPortResult {
      * @param data 处理后的数据
      * @param allData 所有未的原生数据
      */
-    public  void success(String name,Object data, List<String> allData);
+    public  void success(String name,T data, List<String> allData);
 
     /**
      * 失败后调用的方法
@@ -28,7 +28,7 @@ public interface SerialPortResult {
      * @param data 处理后的数据
      * @param allData 所有未的原生数据
      */
-    public  void failure(String name,Object data, List<String> allData);
+    public  void failure(String name,T data, List<String> allData);
 
 
 }
